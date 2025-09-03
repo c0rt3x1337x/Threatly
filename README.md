@@ -34,7 +34,7 @@ threatly/
 │   ├── pages/            # Page components
 │   ├── services/         # API services
 │   └── types/            # TypeScript interfaces
-├── backend/              # Node.js API server
+├── threat-intelligence-backend/  # Node.js API server
 │   ├── config/          # Database configuration
 │   ├── routes/          # API routes
 │   └── server.js        # Express server
@@ -63,7 +63,7 @@ threatly/
 
 3. **Install backend dependencies**
    ```bash
-   cd backend
+   cd threat-intelligence-backend
    npm install
    ```
 
@@ -71,7 +71,7 @@ threatly/
 
 #### Start the Backend Server
 ```bash
-cd backend
+cd threat-intelligence-backend
 npm start
 ```
 The API server will start on `http://localhost:5000`
@@ -127,7 +127,7 @@ The application has been optimized to store source names directly in the databas
 
 **Migration Script:**
 ```bash
-cd backend
+cd threat-intelligence-backend
 npm run migrate:add-sources
 ```
 
@@ -164,7 +164,7 @@ npm test           # Run tests
 
 ### Backend Development
 ```bash
-cd backend
+cd threat-intelligence-backend
 npm run dev        # Start with nodemon (auto-restart)
 npm start          # Start production server
 ```
