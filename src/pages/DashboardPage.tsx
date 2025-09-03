@@ -39,10 +39,6 @@ const DashboardPage: React.FC = () => {
   const [refreshing, setRefreshing] = useState(false);
   const { isDarkMode } = useDarkMode();
 
-  useEffect(() => {
-    fetchDashboardData();
-  }, []);
-
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
@@ -164,6 +160,10 @@ const DashboardPage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
 
   const calculateDailyNewArticles = (articles: Article[]) => {
     const dailyCounts: Record<string, number> = {};

@@ -26,12 +26,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setLoading(true);
       console.log('Checking authentication...');
-      const response = await axios.get('/auth/me');
+      
+      // Get token from localStorage
+      const token = localStorage.getItem('token');
+      console.log('Token from localStorage:', token ? 'Found' : 'Not found');
+      
+      if (!token) {
+        console.log('No token found in localStorage');
+        setUser(null);
+        setLoading(false);
+        return;
+      }
+
+      // Set the token in axios headers for this request
+      const response = await axios.get('/auth/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      
       console.log('Auth check response:', response.data);
       setUser(response.data.user);
       setError(null);
+      
+      // Set the token in axios defaults for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      console.log('Authentication successful, user restored');
     } catch (error) {
       console.log('Auth check failed:', error);
+      // Clear invalid token
+      localStorage.removeItem('token');
       setUser(null);
       setError(null); // Don't set error for failed auth check
     } finally {
@@ -50,6 +74,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       });
       
       setUser(response.data.user);
+      localStorage.setItem('token', response.data.token);
+      
+      // Set the token in axios defaults for future requests
+      axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+      
+      setError(null);
+      console.log('Login successful, token stored in localStorage');
     } catch (error: any) {
       // Handle different error response formats
       let errorMessage = 'Login failed';
@@ -106,8 +137,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       // Ignore logout errors
     } finally {
+      // Clear user state and token
       setUser(null);
       setError(null);
+      localStorage.removeItem('token');
+      
+      // Remove token from axios headers
+      delete axios.defaults.headers.common['Authorization'];
+      console.log('Logout successful, token cleared from localStorage');
     }
   };
 

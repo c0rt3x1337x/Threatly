@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { apiService } from '../services/api';
 import { Article } from '../types/Article';
 import { useReadStatus } from '../context/ReadStatusContext';
@@ -36,16 +36,32 @@ const SpamPage: React.FC = () => {
   });
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    fetchSpamArticles();
-    fetchKeywords();
+  const fetchSpamArticles = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await apiService.getSpamArticles();
+      setSpamArticles(data);
+      
+      // Refresh read status for spam articles
+      if (data.length > 0) {
+        const articleIds = data.map((article: Article) => article._id);
+        await refreshReadStatus(articleIds);
+        await refreshSavedStatus(articleIds);
+      }
+
+      // Get read statistics
+      const stats = await getReadStats();
+      setReadStats(stats);
+    } catch (err) {
+      console.error('Error fetching spam articles:', err);
+      setError('Failed to fetch spam articles');
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  useEffect(() => {
-    filterSpamArticles();
-  }, [spamArticles, filters, searchTerm]);
-
-  const filterSpamArticles = () => {
+  const filterSpamArticles = useCallback(() => {
     try {
       let filtered = spamArticles;
 
@@ -144,7 +160,16 @@ const SpamPage: React.FC = () => {
     } catch (error) {
       console.error('Error filtering spam articles:', error);
     }
-  };
+  }, [spamArticles, filters, searchTerm]);
+
+  useEffect(() => {
+    fetchSpamArticles();
+    fetchKeywords();
+  }, [fetchSpamArticles]);
+
+  useEffect(() => {
+    filterSpamArticles();
+  }, [filterSpamArticles]);
 
   const handleFilterChange = (filterName: string, value: any) => {
     setFilters(prev => ({
@@ -155,31 +180,6 @@ const SpamPage: React.FC = () => {
 
   const handleSearchChange = (term: string) => {
     setSearchTerm(term);
-  };
-
-  const fetchSpamArticles = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await apiService.getSpamArticles();
-      setSpamArticles(data);
-      
-      // Refresh read status for spam articles
-      if (data.length > 0) {
-        const articleIds = data.map((article: Article) => article._id);
-        await refreshReadStatus(articleIds);
-        await refreshSavedStatus(articleIds);
-      }
-
-      // Get read statistics
-      const stats = await getReadStats();
-      setReadStats(stats);
-    } catch (err) {
-      console.error('Error fetching spam articles:', err);
-      setError('Failed to fetch spam articles');
-    } finally {
-      setLoading(false);
-    }
   };
 
   const fetchKeywords = async () => {

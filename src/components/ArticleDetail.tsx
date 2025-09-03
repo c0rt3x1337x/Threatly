@@ -50,21 +50,6 @@ const ArticleDetail: React.FC<ArticleDetailProps> = ({ article, loading }) => {
     }
   };
 
-  const getTypeColor = (type: string | undefined) => {
-    if (!type) {
-      return 'bg-gray-100 text-gray-800';
-    }
-    
-    switch (type.toLowerCase()) {
-      case 'news':
-        return 'bg-blue-100 text-blue-700';
-      case 'forum':
-        return 'bg-purple-100 text-purple-700';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">

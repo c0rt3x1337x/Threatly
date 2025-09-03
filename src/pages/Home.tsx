@@ -34,6 +34,7 @@ const Home: React.FC = () => {
     threatType: '',
   });
   const [keywords, setKeywords] = useState<Record<string, { name: string; displayName: string }>>({});
+  const [unviewedArticles, setUnviewedArticles] = useState<Article[]>([]);
 
   useEffect(() => {
     fetchArticles();

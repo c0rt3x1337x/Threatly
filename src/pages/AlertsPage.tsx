@@ -54,19 +54,14 @@ const AlertsPage: React.FC = () => {
 
   // Update read stats when readStatus changes
   useEffect(() => {
-    if (filteredArticles.length > 0) {
-      const readCount = filteredArticles.filter(article => readStatus[article._id]).length;
-      const unreadCount = filteredArticles.length - readCount;
-      const readPercentage = filteredArticles.length > 0 ? Math.round((readCount / filteredArticles.length) * 100) : 0;
-      
-      setReadStats({
-        totalArticles: filteredArticles.length,
-        readArticles: readCount,
-        unreadArticles: unreadCount,
-        readPercentage: readPercentage
-      });
-    }
-  }, [readStatus, filteredArticles]);
+    const updateReadStats = async () => {
+      if (articles.length > 0) {
+        const stats = await getReadStats();
+        setReadStats(stats);
+      }
+    };
+    updateReadStats();
+  }, [articles, readStatus, getReadStats]);
 
   useEffect(() => {
     const filterArticles = async () => {

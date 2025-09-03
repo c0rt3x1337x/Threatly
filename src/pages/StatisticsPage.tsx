@@ -92,7 +92,6 @@ interface OpenAIBilling {
 const StatisticsPage: React.FC = () => {
   const [workflowStats, setWorkflowStats] = useState<WorkflowStats | null>(null);
   const [overviewStats, setOverviewStats] = useState<OverviewStats | null>(null);
-  const [feedStats, setFeedStats] = useState<FeedStats[]>([]);
   const [prompts, setPrompts] = useState<Prompt[]>([]);
   const [activePrompt, setActivePrompt] = useState<Prompt | null>(null);
   const [workflowRuns, setWorkflowRuns] = useState<WorkflowRun[]>([]);
@@ -155,7 +154,6 @@ const StatisticsPage: React.FC = () => {
         savedArticles: 0,
         spamArticles: 0
       });
-      setFeedStats(detailedData?.feeds || []);
       setPrompts(Array.isArray(promptsData) ? promptsData : (promptsData?.data || []));
       setActivePrompt(activePromptData);
       setWorkflowRuns(workflowRunsData?.data?.runs || workflowRunsData?.runs || []);
