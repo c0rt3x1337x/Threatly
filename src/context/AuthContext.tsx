@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 import { User, AuthContextType, LoginResponse, RegisterResponse } from '../types/User';
+import { API_CONFIG } from '../config/api';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Configure axios defaults
-axios.defaults.baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+axios.defaults.baseURL = API_CONFIG.BASE_URL;
 axios.defaults.withCredentials = true;
 
 interface AuthProviderProps {

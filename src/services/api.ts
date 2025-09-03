@@ -1,11 +1,10 @@
 import { Article } from '../types/Article';
 import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:3001/api';
+import { API_CONFIG } from '../config/api';
 
 // Create axios instance with proper configuration
 const apiClient = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: API_CONFIG.BASE_URL,
   withCredentials: true, // Include cookies for authentication
   headers: {
     'Content-Type': 'application/json',
