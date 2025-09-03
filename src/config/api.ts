@@ -2,7 +2,7 @@
 export const API_CONFIG = {
   // Development: localhost
   // Production: Railway URL
-  BASE_URL: process.env.REACT_APP_API_URL || 'https://your-railway-app-name.up.railway.app/api',
+  BASE_URL: process.env.REACT_APP_API_URL || 'http://localhost:3001/api',
   
   // Timeout settings
   TIMEOUT: 30000, // 30 seconds
