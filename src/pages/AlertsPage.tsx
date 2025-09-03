@@ -4,7 +4,6 @@ import { Article } from '../types/Article';
 import FilterBar from '../components/FilterBar';
 import SearchBar from '../components/SearchBar';
 import ArticleList from '../components/ArticleList';
-import { useViewedArticles } from '../context/ViewedArticlesContext';
 import { useReadStatus } from '../context/ReadStatusContext';
 import { useSavedArticles } from '../context/SavedArticlesContext';
 import { useAuth } from '../context/AuthContext';
@@ -47,10 +46,72 @@ const AlertsPage: React.FC = () => {
     threatType: '',
   });
 
+  const fetchArticles = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Use the new authenticated alerts endpoint that filters by user ownership
+      const response = await apiService.getAlertsArticles(1, 1000); // Get first 1000 articles
+      const allArticles = response.data;
+      
+      // Set articles
+      setArticles(allArticles);
+      
+      // Only set error if no articles were returned
+      if (!allArticles || allArticles.length === 0) {
+        setError('No articles found');
+        setFilteredArticles([]);
+      } else {
+        // Clear any previous error if we have articles
+        setError(null);
+        
+        // Show articles that have any alert matches
+        let initialFiltered = allArticles.filter(article => 
+          article.alertMatches && article.alertMatches.length > 0
+        );
+        setFilteredArticles(initialFiltered);
+        
+        // Refresh read status and saved status
+        const articleIds = allArticles.map(article => article._id);
+        await Promise.all([
+          refreshReadStatus(articleIds),
+          refreshSavedStatus(articleIds)
+        ]);
+        
+        // Calculate read stats locally for the filtered articles
+        const readCount = initialFiltered.filter(article => article.read).length;
+        const unreadCount = initialFiltered.length - readCount;
+        const readPercentage = initialFiltered.length > 0 ? Math.round((readCount / initialFiltered.length) * 100) : 0;
+        
+        setReadStats({
+          totalArticles: initialFiltered.length,
+          readArticles: readCount,
+          unreadArticles: unreadCount,
+          readPercentage: readPercentage
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      setError('Failed to fetch articles');
+    } finally {
+      setLoading(false);
+    }
+  }, [refreshReadStatus, refreshSavedStatus]);
+
+  const fetchKeywords = useCallback(async () => {
+    try {
+      const keywordsData = await apiService.getKeywords();
+      setKeywords(keywordsData);
+    } catch (error) {
+      console.error('Error fetching keywords:', error);
+    }
+  }, []);
+
   useEffect(() => {
     fetchArticles();
     fetchKeywords();
-  }, []);
+  }, [fetchArticles, fetchKeywords]);
 
   // Update read stats when readStatus changes
   useEffect(() => {
@@ -192,68 +253,6 @@ const AlertsPage: React.FC = () => {
 
     filterArticles();
   }, [articles, searchTerm, filters, readStatus]);
-
-  const fetchArticles = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      // Use the new authenticated alerts endpoint that filters by user ownership
-      const response = await apiService.getAlertsArticles(1, 1000); // Get first 1000 articles
-      const allArticles = response.data;
-      
-      // Set articles
-      setArticles(allArticles);
-      
-      // Only set error if no articles were returned
-      if (!allArticles || allArticles.length === 0) {
-        setError('No articles found');
-        setFilteredArticles([]);
-      } else {
-        // Clear any previous error if we have articles
-        setError(null);
-        
-        // Show articles that have any alert matches
-        let initialFiltered = allArticles.filter(article => 
-          article.alertMatches && article.alertMatches.length > 0
-        );
-        setFilteredArticles(initialFiltered);
-        
-        // Refresh read status and saved status
-        const articleIds = allArticles.map(article => article._id);
-        await Promise.all([
-          refreshReadStatus(articleIds),
-          refreshSavedStatus(articleIds)
-        ]);
-        
-        // Calculate read stats locally for the filtered articles
-        const readCount = initialFiltered.filter(article => article.read).length;
-        const unreadCount = initialFiltered.length - readCount;
-        const readPercentage = initialFiltered.length > 0 ? Math.round((readCount / initialFiltered.length) * 100) : 0;
-        
-        setReadStats({
-          totalArticles: initialFiltered.length,
-          readArticles: readCount,
-          unreadArticles: unreadCount,
-          readPercentage: readPercentage
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching articles:', error);
-      setError('Failed to fetch articles');
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const fetchKeywords = useCallback(async () => {
-    try {
-      const keywordsData = await apiService.getKeywords();
-      setKeywords(keywordsData);
-    } catch (error) {
-      console.error('Error fetching keywords:', error);
-    }
-  }, []);
 
   const handleFilterChange = (filterName: string, value: any) => {
     setFilters(prev => ({

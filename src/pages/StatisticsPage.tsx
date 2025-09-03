@@ -23,15 +23,7 @@ interface OverviewStats {
   spamArticles: number;
 }
 
-interface FeedStats {
-  name: string;
-  url: string;
-  isActive: boolean;
-  totalArticles: number;
-  recentArticles: number;
-  lastFetch: string;
-  status: string;
-}
+
 
 interface Prompt {
   _id: string;

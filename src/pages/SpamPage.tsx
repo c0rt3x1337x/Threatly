@@ -42,7 +42,7 @@ const SpamPage: React.FC = () => {
       setError(null);
       const data = await apiService.getSpamArticles();
       setSpamArticles(data);
-      
+
       // Refresh read status for spam articles
       if (data.length > 0) {
         const articleIds = data.map((article: Article) => article._id);
@@ -59,7 +59,7 @@ const SpamPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [refreshReadStatus, refreshSavedStatus, getReadStats]);
 
   const filterSpamArticles = useCallback(() => {
     try {

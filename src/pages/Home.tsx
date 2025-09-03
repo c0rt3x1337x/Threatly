@@ -1,15 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { apiService } from '../services/api';
 import { Article } from '../types/Article';
+import { useReadStatus } from '../context/ReadStatusContext';
+import ArticleList from '../components/ArticleList';
 import FilterBar from '../components/FilterBar';
 import SearchBar from '../components/SearchBar';
-import ArticleList from '../components/ArticleList';
-import { useViewedArticles } from '../context/ViewedArticlesContext';
-import { useReadStatus } from '../context/ReadStatusContext';
+import { apiService } from '../services/api';
 
 const Home: React.FC = () => {
-  const { clearViewedArticles } = useViewedArticles();
   const { readStatus, refreshReadStatus, getReadStats, markAllAsRead } = useReadStatus();
   const [articles, setArticles] = useState<Article[]>([]);
   const [filteredArticles, setFilteredArticles] = useState<Article[]>([]);
@@ -34,12 +31,58 @@ const Home: React.FC = () => {
     threatType: '',
   });
   const [keywords, setKeywords] = useState<Record<string, { name: string; displayName: string }>>({});
-  const [unviewedArticles, setUnviewedArticles] = useState<Article[]>([]);
+
+  const fetchArticles = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Use getAllArticlesWithAlerts to fetch all articles, not just first page
+      // This ensures the hide read filter works properly across all articles
+      const data = await apiService.getAllArticlesWithAlerts();
+      console.log('Received articles from API:', data.length);
+      console.log('Sample articles with types:', data.slice(0, 3).map(a => ({ title: a.title, type: a.type, source: a.name })));
+      setArticles(data);
+      
+      // Refresh read status for all articles
+      if (data.length > 0) {
+        const articleIds = data.map(article => article._id);
+        await refreshReadStatus(articleIds);
+      }
+      
+      // Get read statistics
+      const stats = await getReadStats();
+      setReadStats(stats);
+    } catch (error) {
+      console.error('Error fetching articles:', error);
+      setError('Failed to fetch articles');
+    } finally {
+      setLoading(false);
+    }
+  }, [refreshReadStatus, getReadStats]);
+
+  const fetchKeywords = useCallback(async () => {
+    try {
+      const keywordsData = await apiService.getKeywords();
+      const keywordsMap: Record<string, { name: string; displayName: string }> = {};
+      
+      keywordsData.forEach((keyword: any) => {
+        keywordsMap[keyword._id] = {
+          name: keyword.name,
+          displayName: keyword.displayName || keyword.name
+        };
+      });
+      
+      setKeywords(keywordsMap);
+    } catch (err) {
+      console.error('Error fetching keywords:', err);
+    }
+  }, []);
 
   useEffect(() => {
     fetchArticles();
     fetchKeywords();
-  }, []);
+  }, [fetchArticles, fetchKeywords]);
 
   useEffect(() => {
     const filterArticles = async () => {
@@ -269,53 +312,6 @@ const Home: React.FC = () => {
 
     filterArticles();
   }, [articles, searchTerm, filters, readStatus]);
-
-  const fetchArticles = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      
-      // Use getAllArticlesWithAlerts to fetch all articles, not just first page
-      // This ensures the hide read filter works properly across all articles
-      const data = await apiService.getAllArticlesWithAlerts();
-      console.log('Received articles from API:', data.length);
-      console.log('Sample articles with types:', data.slice(0, 3).map(a => ({ title: a.title, type: a.type, source: a.name })));
-      setArticles(data);
-      
-      // Refresh read status for all articles
-      if (data.length > 0) {
-        const articleIds = data.map(article => article._id);
-        await refreshReadStatus(articleIds);
-      }
-      
-      // Get read statistics
-      const stats = await getReadStats();
-      setReadStats(stats);
-    } catch (error) {
-      console.error('Error fetching articles:', error);
-      setError('Failed to fetch articles');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchKeywords = async () => {
-    try {
-      const keywordsData = await apiService.getKeywords();
-      const keywordsMap: Record<string, { name: string; displayName: string }> = {};
-      
-      keywordsData.forEach((keyword: any) => {
-        keywordsMap[keyword._id] = {
-          name: keyword.name,
-          displayName: keyword.displayName || keyword.name
-        };
-      });
-      
-      setKeywords(keywordsMap);
-    } catch (err) {
-      console.error('Error fetching keywords:', err);
-    }
-  };
 
   const handleFilterChange = (filterName: string, value: any) => {
     setFilters(prev => ({ ...prev, [filterName]: value }));
