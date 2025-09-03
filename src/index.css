@@ -1,13 +1,260 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+    caret-color: transparent !important;
+  }
+  
+  body {
+    @apply bg-gray-50 dark:bg-dark-900 text-gray-900 dark:text-gray-100;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  /* Prevent cursor issues in sidebar */
+  nav a {
+    @apply select-none;
+    caret-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    cursor: pointer !important;
+    outline: none !important;
+    -webkit-touch-callout: none !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    -ms-user-modify: read-only !important;
+    user-modify: read-only !important;
+  }
+  
+  nav a:focus, nav a:hover, nav a:active {
+    @apply outline-none;
+    caret-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+  
+  /* Additional prevention for any focus states */
+  nav a:focus-visible {
+    outline: none !important;
+    caret-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+  }
+  
+  /* Prevent text selection on all navigation elements */
+  nav * {
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    caret-color: transparent !important;
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    -ms-user-modify: read-only !important;
+    user-modify: read-only !important;
+  }
+  
+  /* Additional prevention for any interactive elements in nav */
+  nav a span {
+    caret-color: transparent !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    -ms-user-modify: read-only !important;
+    user-modify: read-only !important;
+  }
+  
+  /* Specific prevention for sidebar items */
+  .sidebar-item, .sidebar-item-active {
+    caret-color: transparent !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    -ms-user-modify: read-only !important;
+    user-modify: read-only !important;
+    cursor: pointer !important;
+    caret: none !important;
+    caret-color: transparent !important;
+    caret-shape: auto !important;
+  }
+  
+  /* Additional prevention for any text elements in sidebar */
+  nav a span, nav a div, nav a * {
+    caret-color: transparent !important;
+    caret: none !important;
+    user-select: none !important;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    -webkit-user-modify: read-only !important;
+    -moz-user-modify: read-only !important;
+    -ms-user-modify: read-only !important;
+    user-modify: read-only !important;
+  }
+  
+  /* Global prevention for any cursor issues */
+  * {
+    caret-color: transparent !important;
+  }
+  
+  /* Specific prevention for navigation text */
+  nav a, nav a *, nav span, nav div {
+    caret: none !important;
+    caret-color: transparent !important;
+    caret-shape: auto !important;
+  }
+  
+  /* Aggressive prevention for any text cursor */
+  body, html, #root, .App {
+    caret-color: transparent !important;
+  }
+  
+  /* Force remove any text cursor from navigation */
+  nav, nav *, .sidebar-item, .sidebar-item-active, nav a, nav a * {
+    caret: none !important;
+    caret-color: transparent !important;
+    caret-shape: auto !important;
+    -webkit-text-fill-color: inherit !important;
+    -webkit-text-stroke: 0 !important;
+  }
+  
+  /* Prevent icon movement in sidebar */
+  .sidebar-item svg, .sidebar-item-active svg {
+    transform: none !important;
+    transition: none !important;
+    position: static !important;
+    margin-right: 0.75rem !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+    flex-shrink: 0 !important;
+  }
+  
+  /* Ensure sidebar items maintain stable layout */
+  .sidebar-item, .sidebar-item-active {
+    transform: none !important;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 dark:from-primary-500 dark:to-primary-600 dark:hover:from-primary-600 dark:hover:to-primary-700 text-white font-medium py-2.5 px-5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-dark-900;
+  }
+  
+  .btn-secondary {
+    @apply bg-white hover:bg-gray-50 dark:bg-dark-800 dark:hover:bg-dark-700 text-gray-700 dark:text-gray-200 font-medium py-2.5 px-5 rounded-xl transition-all duration-300 shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-dark-900 border border-gray-200 dark:border-dark-600;
+  }
+  
+  .btn-danger {
+    @apply bg-gradient-to-r from-danger-600 to-danger-700 hover:from-danger-700 hover:to-danger-800 dark:from-danger-500 dark:to-danger-600 dark:hover:from-danger-600 dark:hover:to-danger-700 text-white font-medium py-2.5 px-5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-danger-500 focus:ring-offset-2 dark:focus:ring-offset-dark-900;
+  }
+  
+  .btn-success {
+    @apply bg-gradient-to-r from-success-600 to-success-700 hover:from-success-700 hover:to-success-800 dark:from-success-500 dark:to-success-600 dark:hover:from-success-600 dark:hover:to-success-700 text-white font-medium py-2.5 px-5 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-success-500 focus:ring-offset-2 dark:focus:ring-offset-dark-900;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-dark-800 rounded-2xl shadow-lg dark:shadow-2xl border border-gray-100 dark:border-dark-700 hover:shadow-xl dark:hover:shadow-glow transition-all duration-300 backdrop-blur-sm;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-3 border border-gray-200 dark:border-dark-600 rounded-xl bg-white dark:bg-dark-800 text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent dark:focus:ring-offset-dark-900 transition-all duration-200 shadow-sm;
+  }
+  
+  .sidebar-item {
+    @apply flex items-center px-4 py-3 rounded-xl font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-dark-700 hover:text-gray-900 dark:hover:text-white focus:outline-none select-none cursor-pointer border-l-4 border-transparent;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .sidebar-item-active {
+    @apply bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-200 border-l-4 border-primary-500 dark:border-primary-400 shadow-sm focus:outline-none select-none cursor-pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  
+  .badge {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200;
+  }
+  
+  .badge-success {
+    @apply bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-200 border border-green-200 dark:border-green-800;
+  }
+  
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-200 border border-yellow-200 dark:border-yellow-800;
+  }
+  
+  .badge-danger {
+    @apply bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-200 border border-red-200 dark:border-red-800;
+  }
+  
+  .badge-info {
+    @apply bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-200 border border-blue-200 dark:border-blue-800;
+  }
+  
+  .badge-neutral {
+    @apply bg-gray-100 text-gray-800 dark:bg-dark-700 dark:text-gray-300 border border-gray-200 dark:border-dark-600;
+  }
+  
+  .badge-accent {
+    @apply bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-200 border border-purple-200 dark:border-purple-800;
+  }
+  
+  .tab-active {
+    @apply bg-white dark:bg-dark-700 text-primary-600 dark:text-primary-400 shadow-sm border border-gray-200 dark:border-dark-600;
+  }
+  
+  .tab-inactive {
+    @apply text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 via-accent-600 to-primary-700 bg-clip-text text-transparent;
+  }
+  
+  .bg-gradient-primary {
+    @apply bg-gradient-to-br from-primary-600 via-primary-700 to-accent-600;
+  }
+  
+  .glass-effect {
+    @apply backdrop-blur-sm bg-white/10 dark:bg-dark-800/10 border border-white/20 dark:border-dark-700/20;
+  }
+  
+  .glow-effect {
+    @apply shadow-glow dark:shadow-glow;
+  }
+  
+  .glow-success {
+    @apply shadow-glow-success dark:shadow-glow-success;
+  }
+  
+  .glow-warning {
+    @apply shadow-glow-warning dark:shadow-glow-warning;
+  }
+  
+  .glow-danger {
+    @apply shadow-glow-danger dark:shadow-glow-danger;
+  }
 }
