@@ -1,4 +1,13 @@
-# Threatly - Threat Intelligence Dashboard
+# Threatly - Threat Intelligence Platform
+<img width="1916" height="1045" alt="image" src="https://github.com/user-attachments/assets/e75a6b52-572b-4c01-969d-f99f3a1437fc" />
+<img width="1915" height="1022" alt="image" src="https://github.com/user-attachments/assets/b6403545-0718-433f-9cbe-9b2b1c4148ac" />
+## Alerting powered by ananlysis of LLM
+<img width="1919" height="1065" alt="image" src="https://github.com/user-attachments/assets/75f1619a-56c7-4bbd-a6ee-3c63cf9e9c69" />
+## Your custom keywords for generating alerts
+<img width="1919" height="841" alt="image" src="https://github.com/user-attachments/assets/258b6859-766f-4d40-b095-0a37122c3797" />
+## User Management
+<img width="1919" height="1046" alt="image" src="https://github.com/user-attachments/assets/d2c58fd9-1f53-4e7d-99b9-4a30733a3896" />
+
 
 A modern React-based threat intelligence dashboard that displays security articles from MongoDB with advanced filtering and search capabilities.
 
