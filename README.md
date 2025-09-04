@@ -4,11 +4,11 @@
 
 <img width="1915" height="1022" alt="image" src="https://github.com/user-attachments/assets/b6403545-0718-433f-9cbe-9b2b1c4148ac" />
 
-## Alerting powered by ananlysis of LLM
+## Smart Alerting, Driven by LLMs
 
 <img width="1919" height="1065" alt="image" src="https://github.com/user-attachments/assets/75f1619a-56c7-4bbd-a6ee-3c63cf9e9c69" />
 
-## Your custom keywords for generating alerts
+## Create Custom Keywords to Power Alerts
 
 <img width="1919" height="841" alt="image" src="https://github.com/user-attachments/assets/258b6859-766f-4d40-b095-0a37122c3797" />
 
@@ -16,11 +16,11 @@
 
 <img width="1919" height="1046" alt="image" src="https://github.com/user-attachments/assets/d2c58fd9-1f53-4e7d-99b9-4a30733a3896" />
 
-## Source Management
+## Manage Your Threat Intelligence Sources
 
 <img width="1919" height="1046" alt="image" src="https://github.com/user-attachments/assets/70b00ec9-cfa6-4ee2-8ae3-5f3e913c1125" />
 
-A modern React-based threat intelligence dashboard that displays security articles from MongoDB with advanced filtering and search capabilities.
+A modern React-based threat intelligence platform that aggregates and analyzes security articles with advanced filtering, search, and alerting.
 
 ## Features
 
